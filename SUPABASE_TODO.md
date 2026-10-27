@@ -75,3 +75,11 @@ npm run import:batch -- --dir ./data/review_batch_english
 - [ ] Export individual-vote and consensus CSVs when annotation ends. Preserve the sampling manifest and source row indices for your capstone.
 
 **Short PIN security:** The DB-backed limit mitigates repeated guessing from a single IP, but cannot fully protect against distributed guessing. Use deployment protection or a stronger sign-in method if the site is exposed publicly.
+
+## Version 3 follow-up (existing English-only batch)
+
+- [ ] **Do not run `sql/03_reset_unvoted_batch.sql` when updating an existing batch.** The original 500 observations and votes stay as they are.
+- [ ] Before deploying the new code, run `sql/04_vote_reasons.sql` in Supabase SQL Editor to add reason metadata and update the voting RPC.
+- [ ] Replace the site source files but retain `.env.local`, reviewer PINs and any `data/` files.
+- [ ] Run `npm run typecheck` and `npm run build` locally, then deploy and test the updated vote export.
+- [ ] See `UPDATE_TO_V3.md` for all changes, including the keyword taxonomy and A/B attribution.

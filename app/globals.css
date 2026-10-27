@@ -9,3 +9,100 @@
 @media(max-width:1000px){.vote-options{grid-template-columns:repeat(3,minmax(0,1fr))}.login-wrap{gap:0}.response-text{max-height:660px}}
 @media(max-width:700px){.header-content{padding:12px 18px;min-height:74px}.header-right{gap:8px}.batch-label{display:none}.signout{display:none}.brand small{font-size:8px}.login-wrap{padding:52px 21px 70px}.login-card{padding:27px}.workspace{padding:30px 16px 70px}.workspace-header{display:block}.workspace-header h1{font-size:35px}.progress-card{margin-top:20px;min-width:0}.prompt-card{padding:20px}.prompt-text{font-size:15px}.response-grid{grid-template-columns:1fr}.response-text{max-height:440px;min-height:120px}.responses-head{align-items:center}.responses-head h2{font-size:21px}.vote-card{padding:19px 16px}.vote-options{grid-template-columns:1fr 1fr}.vote-option{min-height:72px}.vote-bottom{flex-direction:column;align-items:stretch}.vote-bottom button{width:100%}.vote-bottom span{text-align:center}.site-footer{padding:20px 17px}.site-footer span{display:none}}
 @media(max-width:400px){.vote-options{grid-template-columns:1fr}.vote-option{min-height:55px}.header-user{font-size:12px}.brand strong{font-size:14px}}
+
+/* v3: compact desktop review; the browser page is fixed, but every long response
+   (and long prompt) remains independently scrollable and readable. */
+.review-shell{min-height:100dvh}
+.review-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none}
+.review-toolbar-title{display:flex;align-items:baseline;gap:12px;min-width:0}
+.review-toolbar-title strong{font-size:17px;letter-spacing:-.3px;white-space:nowrap}
+.review-toolbar-title span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.review-shell .progress-card{min-width:250px;width:270px;padding:9px 12px;border-radius:9px;flex:none}
+.review-shell .progress-label{font-size:11px;margin-bottom:7px}
+.review-shell .progress-track{margin:0;height:5px}
+.review-shell .progress-card>span{display:none}
+.review-shell .response-grid{min-height:0;height:100%}
+.review-shell .response-card{min-height:0}
+.review-shell .response-top{padding:7px 12px;gap:8px;min-height:39px;flex:none}
+.review-shell .response-letter{width:27px;height:27px;border-radius:6px;font-size:13px}
+.review-shell .response-top strong{font-size:12px}
+.review-shell .response-scroll{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain}
+.review-shell .response-text{padding:13px 15px;min-height:0;max-height:none;overflow:visible;line-height:1.57;font-size:12px;flex:none}
+.review-shell .context-section summary{padding:8px 14px}
+.review-shell .context-list{max-height:none;overflow:visible;padding:0 14px 9px}
+.review-shell .prompt-card{margin:0;padding:11px 15px;border-radius:9px;overflow:auto;min-height:0;overscroll-behavior:contain}
+.review-shell .prompt-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-11px;background:#e8f2f0;padding:3px 0 5px;z-index:1}
+.review-shell .prompt-heading strong{color:var(--teal);font-size:11px}
+.review-shell .meta-chip{padding:3px 7px;font-size:10px;white-space:nowrap}
+.review-shell .prompt-text{margin:3px 0 0;font-size:13px;line-height:1.43;font-weight:520}
+.review-shell .vote-card{position:relative;margin:0;padding:10px 12px;border-radius:9px;display:flex;flex-direction:column;gap:8px;box-shadow:none;min-width:0}
+.review-shell .vote-line{display:flex;align-items:center;gap:14px}
+.review-shell .field-name{font-size:11px;white-space:nowrap;font-weight:750}
+.review-shell .small-muted{font-size:10px;font-weight:400}
+.review-shell .vote-options{display:flex;flex:1;gap:6px;min-width:0}
+.review-shell .vote-option{min-height:0;flex:1;display:flex;justify-content:center;align-items:center;text-align:center;gap:8px;padding:7px 8px;border-radius:7px}
+.review-shell .vote-option span{font-size:11px;font-weight:750;white-space:nowrap}
+.review-shell .vote-option kbd{font-size:10px;color:#7f9499;font-weight:400}
+.review-shell .vote-option.selected{background:var(--teal);color:white}
+.review-shell .vote-option.selected kbd{color:#d8f1ef}
+.review-shell .reasons-line{display:grid;grid-template-columns:140px minmax(0,1fr);gap:12px;align-items:start}
+.review-shell .reason-label{display:flex;flex-direction:column;gap:5px}
+.review-shell .reason-target-label{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.review-shell .reason-target-label select{min-height:23px;height:23px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:2px 6px;font-size:11px;min-width:68px}
+.review-shell .reason-tags{display:flex;gap:5px;flex-wrap:wrap;align-content:flex-start}
+.review-shell .tag-button{border:1px solid #d2dfe0;border-radius:6px;background:#f9fbfa;padding:5px 7px;font-weight:550;font-size:10px;line-height:1.1;color:#46616b;white-space:nowrap}
+.review-shell .tag-button:hover:not(:disabled){border-color:var(--teal)}
+.review-shell .tag-button.active{background:#dcefe9;color:#0b5555;border-color:#247b72;box-shadow:inset 0 0 0 1px #247b72}
+.review-shell .reason-entry-line{display:flex;align-items:center;gap:12px;min-width:0}
+.review-shell .reason-entry-line input{flex:1;min-width:0;min-height:35px;height:35px;border-radius:7px;border:1px solid #d4e0e2;background:#fff;color:var(--ink);padding:7px 10px;font-size:12px}
+.review-shell .reason-entry-line input:focus{outline:2px solid #8bc6c1;outline-offset:1px}
+.review-shell .primary-button.vote-submit{min-width:147px;min-height:35px;height:35px;padding:7px 12px;font-size:12px;white-space:nowrap}
+.review-shell .tag-selection{color:#6c7d83;font-size:10px;line-height:1.2;margin:0;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.review-shell .guidance-toggle{position:absolute;top:-31px;right:3px}
+.review-shell .guidance-toggle .text-button{font-size:11px}
+.review-shell .guidance{position:absolute;bottom:calc(100% + 31px);right:0;z-index:4;width:min(510px,100%);padding:13px 16px;background:white;border:1px solid #c9dfda;border-radius:9px;box-shadow:0 10px 25px #0002;font-size:12px;line-height:1.5;margin:0}
+.review-shell .workspace-footer{margin:0;padding:0;align-items:center;font-size:10px;color:var(--muted)}
+.review-shell .workspace-footer .text-button{font-size:10px;padding:2px 0}
+.review-shell .export-card{position:fixed;z-index:15;right:20px;bottom:20px;max-height:calc(100dvh - 100px);width:min(540px,calc(100vw - 40px));overflow:auto;box-shadow:0 20px 70px #21383c33}
+
+@media (min-width:850px) and (min-height:700px){
+  .app-shell.review-shell{height:100dvh;min-height:0;overflow:hidden}
+  .review-shell .site-header{flex:0 0 54px}
+  .review-shell .header-content{min-height:54px;padding:5px 24px;max-width:none}
+  .review-shell .brand-symbol{width:32px;height:32px;border-radius:9px;font-size:22px}
+  .review-shell .brand strong{font-size:14px}
+  .review-shell .brand small{font-size:8px;letter-spacing:1px;margin-top:1px}
+  .review-shell .avatar{width:28px;height:28px}
+  .review-shell .workspace.review-workspace{max-width:1600px;padding:8px 18px 6px;flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+  .review-shell .review-toolbar{height:43px}
+  .review-shell .review-layout{min-height:0;flex:1;display:grid;grid-template-rows:minmax(77px,112px) minmax(0,1fr) auto;gap:8px}
+  .review-shell .vote-card{flex:none}
+  .review-shell .workspace-footer{min-height:18px;flex:none}
+}
+/* On smaller screens, allowing the page to scroll is necessary for readable,
+   side-by-side content and accessible voting controls. */
+@media(max-width:849px), (max-height:699px){
+  .review-shell .workspace.review-workspace{padding:16px 14px 28px;display:flex;flex-direction:column;gap:12px}
+  .review-shell .review-layout{display:flex;flex-direction:column;gap:12px}
+  .review-shell .prompt-card{max-height:170px}
+  .review-shell .response-grid{height:auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .review-shell .response-card{height:300px}
+  .review-shell .vote-line{align-items:stretch;flex-direction:column;gap:8px}
+  .review-shell .vote-options{flex-wrap:wrap}
+  .review-shell .vote-option{flex:1 0 29%;min-height:37px}
+  .review-shell .reasons-line{grid-template-columns:1fr;gap:5px}
+  .review-shell .reason-label{flex-direction:row;align-items:center;justify-content:space-between}
+  .review-shell .guidance-toggle{position:static;align-self:flex-end;order:5}
+  .review-shell .guidance{bottom:50px}
+  .review-shell .workspace-footer{padding:8px 4px}
+}
+@media(max-width:620px){
+  .review-toolbar-title span{display:none}
+  .review-shell .progress-card{min-width:0;width:170px}
+  .review-shell .response-grid{grid-template-columns:1fr}
+  .review-shell .response-card{height:265px}
+  .review-shell .reason-entry-line{flex-wrap:wrap}
+  .review-shell .reason-entry-line input{width:100%;flex:1 0 calc(100% - 130px)}
+  .review-shell .reason-entry-line .field-name{width:100%}
+  .review-shell .vote-submit{flex:1 0 100%}
+}

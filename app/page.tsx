@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import ReviewCard,{type ReviewItem,type VoteChoice} from '@/components/ReviewCard';
+import ReviewCard,{type ReviewItem,type VoteSubmission} from '@/components/ReviewCard';
 
 type Reviewer={id:string;display_name:string};
 type Stats={assigned:number;completed:number;closed:number;target:number};
@@ -56,11 +56,11 @@ export default function Home(){
       setSession(null);setPin('');setAdminPin('');setView('login');setBusy(false);
     }
   }
-  async function submit(choice:VoteChoice){
+  async function submit(vote:VoteSubmission){
     if(!session?.item)return;
     setBusy(true);setError('');
     try{
-      await api('/api/vote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({observationId:session.item.id,choice})});
+      await api('/api/vote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({observationId:session.item.id,...vote})});
       await load();
     }catch(e){setError(e instanceof Error?e.message:'Could not save your vote.');}
     finally{setBusy(false);}
@@ -80,7 +80,7 @@ export default function Home(){
   const reviewerName=session?.reviewer?.display_name||'Reviewer';
   const stats=session?.stats;
   const pct=stats?.assigned?Math.round(stats.completed/stats.assigned*100):0;
-  return <div className="app-shell">
+  return <div className={`app-shell ${view==='review' ? 'review-shell' : ''}`}>
     <header className="site-header">
       <div className={`header-content ${view==='review' ? '' : 'login-header'}`}>
         {view==='review' && <div className="brand"><div className="brand-symbol">≋</div><div><strong>Search Arena</strong><small>HUMAN PREFERENCE STUDY</small></div></div>}
@@ -103,23 +103,24 @@ export default function Home(){
          <p className="login-help">Your progress is saved automatically. Model identities and other reviewers’ votes stay hidden.</p>
          
        </form></main>:
-       <main className="workspace">
-         <section className="workspace-header"><div><div className="eyebrow">YOUR REVIEW WORKSPACE</div><h1>Compare & decide<span className="period">.</span></h1><p>Read the user prompt, compare both responses, and choose which you prefer.</p></div>
+       <main className="workspace review-workspace">
+         <section className="review-toolbar" aria-label="Review progress">
+           <div className="review-toolbar-title"><strong>Compare responses</strong><span>Blind review · {session?.item?.id||'No current observation'}</span></div>
            <div className="progress-card"><div className="progress-label"><span>Your progress</span><b>{stats?.completed||0} / {stats?.assigned||0}</b></div>
-             <div className="progress-track"><div style={{width:`${pct}%`}}/></div><span>{pct}% of currently assigned reviews completed</span></div>
+             <div className="progress-track"><div style={{width:`${pct}%`}}/></div></div>
          </section>
          {error&&<p className="error-box" role="alert">{error} <button type="button" onClick={()=>void load()}>Refresh</button></p>}
          {session?.item?<ReviewCard key={`${session.item.id}-${session.item.stage}`} item={session.item} saving={busy} onSubmit={submit}/>:
            <div className="empty-card"><div className="empty-icon">✓</div><h2>You're all caught up.</h2><p>No pending assignments right now. If other reviewers disagree, you may receive an additional comparison later.</p>
              <button type="button" className="secondary-button" onClick={()=>void load()}>Check for new assignments</button></div>}
-         <section className="workspace-footer"><div><strong>Study progress</strong><p>{stats?.closed||0} of 500 observations resolved or flagged for adjudication</p></div>
-           <button type="button" className="text-button" onClick={()=>setExportOpen(v=>!v)}>{exportOpen?'Close data export':'Admin · Export results'}</button></section>
+         <section className="workspace-footer"><span>{stats?.closed||0} / 500 observations resolved or flagged</span>
+           <button type="button" className="text-button" onClick={()=>setExportOpen(v=>!v)}>{exportOpen?'Close export':'Admin export'}</button></section>
          {exportOpen&&<section className="export-card"><h3>Export annotation data</h3><p>For the project coordinator. Download a consensus summary keyed by source row, or a vote-level audit trail. Never share the admin export password publicly.</p>
            <label htmlFor="admin-pin">Admin export password</label><input id="admin-pin" type="password" value={adminPin} onChange={e=>setAdminPin(e.target.value)} placeholder="Administrator password"/>
            <div className="export-actions"><button className="secondary-button" disabled={!adminPin||exportBusy} onClick={()=>void downloadExport('summary')}>Download consensus CSV</button>
              <button className="secondary-button" disabled={!adminPin||exportBusy} onClick={()=>void downloadExport('votes')}>Download individual votes CSV</button></div>
          </section>}
        </main>}
-    <footer className="site-footer"><div>SEARCH ARENA / HUMAN ANNOTATION</div><span>Blind review · Independent judgment · Research use</span></footer>
+    {view!=='review'&&<footer className="site-footer"><div>SEARCH ARENA / HUMAN ANNOTATION</div><span>Blind review · Independent judgment · Research use</span></footer>}
   </div>;
 }

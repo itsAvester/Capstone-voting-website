@@ -7,7 +7,9 @@ export const runtime='nodejs';
 function safeCompare(a:string,b:string){const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length&&timingSafeEqual(x,y);}
 function quoteCsv(v:unknown):string{
   const text=v==null?'':typeof v==='string'?v:JSON.stringify(v);
-  return `"${text.replaceAll('"','""')}"`;
+  // Prevent CSV formula injection in spreadsheet clients.
+  const safe=/^[=+@\-\t\r]/.test(text)?`'${text}`:text;
+  return `"${safe.replaceAll('"','""')}"`;
 }
 function csv(rows:Record<string,unknown>[],columns:string[]):string{
   return [columns.map(quoteCsv).join(','),...rows.map(r=>columns.map(c=>quoteCsv(r[c])).join(','))].join('\r\n')+'\r\n';
@@ -36,7 +38,7 @@ export async function POST(req:NextRequest){
     let content:string, filename:string;
     if(body.type==='votes'){
       const votes=await allRows('votes');
-      content=csv(votes,['observation_id','reviewer_id','choice','created_at']);
+      content=csv(votes,['observation_id','reviewer_id','choice','reason_tags','reason_keywords','reason_keywords_target','created_at']);
       filename='search_arena_individual_votes.csv';
     }else{
       const [observations,votes]=await Promise.all([allRows('observations'),allRows('votes')]);
@@ -51,7 +53,7 @@ export async function POST(req:NextRequest){
           vote_b:v.filter(x=>x.choice==='b').length,
           vote_tie:v.filter(x=>x.choice==='tie').length,
           vote_both_bad:v.filter(x=>x.choice==='both_bad').length,
-          reviewer_votes:JSON.stringify(v.map(x=>({reviewer_id:x.reviewer_id,choice:x.choice}))),
+          reviewer_votes:JSON.stringify(v.map(x=>({reviewer_id:x.reviewer_id,choice:x.choice,reason_tags:x.reason_tags,reason_keywords:x.reason_keywords,reason_keywords_target:x.reason_keywords_target}))),
           finalized_at:o.finalized_at};
       });
       content=csv(rows,['id','source_row_id','primary_intent','status','consensus','vote_count','abstentions','vote_a','vote_b','vote_tie','vote_both_bad','reviewer_votes','finalized_at']);

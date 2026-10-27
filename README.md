@@ -77,3 +77,7 @@ Full checklist: [SUPABASE_TODO.md](SUPABASE_TODO.md).
 ## Security
 
 Reviewer PINs are intentionally short per project requirements; they are **not as strong as normal passwords**. `sql/02_login_rate_limit.sql` enforces a modest 5-attempt-per-15-minute limit per reviewer and connecting IP, and the app uses signed HttpOnly cookies. This does not fully eliminate online attack risk, especially across many IPs; for a publicly reachable site use Vercel Deployment Protection or replace PIN auth with full identities. Never expose service-role secrets in client code or Git.
+
+## Version 3 — compact screen and vote reasons
+
+**For teams already running the English-only batch, follow [UPDATE_TO_V3.md](UPDATE_TO_V3.md).** This update does not require sampling 500 new observations or reimporting them. Run the additive Supabase migration `sql/04_vote_reasons.sql` before deploying the new server-side code. Previous votes and progress are preserved. The new compact desktop workspace adds optional side-attributed reason tags and a keyword field; both are included in admin CSV exports.
