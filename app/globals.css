@@ -106,3 +106,16 @@
   .review-shell .reason-entry-line .field-name{width:100%}
   .review-shell .vote-submit{flex:1 0 100%}
 }
+
+/* Version 3.1 — reversible reason selections. Chips always identify their A/B/Both target,
+   even when the applies-to dropdown changes. Removing a chip changes only local unsaved state. */
+.review-shell .selected-tags-row{display:flex;align-items:center;gap:8px;min-width:0;min-height:24px}
+.review-shell .selected-tags-label{font-size:10px;color:#526c70;font-weight:700;white-space:nowrap;flex:none}
+.review-shell .selected-tags-chips{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-width:0;flex:1}
+.review-shell .selected-tag-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #7baea7;background:#e3f2ed;color:#114e4a;border-radius:6px;padding:4px 6px 4px 8px;font-size:10px;line-height:1.15;cursor:pointer;min-height:23px}
+.review-shell .selected-tag-chip:hover:not(:disabled),.review-shell .selected-tag-chip:focus-visible{background:#cce8df;border-color:#166a60;outline-offset:2px}
+.review-shell .selected-tag-x{display:inline-grid;place-items:center;min-width:15px;height:15px;border-radius:4px;background:#c5e2da;font-size:15px;line-height:1;font-weight:800}
+.review-shell .clear-tags-button{border:0;background:transparent;color:#0b7069;font-size:10px;font-weight:750;text-decoration:underline;white-space:nowrap;cursor:pointer;padding:4px 5px;flex:none}
+.review-shell .clear-tags-button:hover:not(:disabled){color:#053f3a}
+.review-shell .selected-tag-chip:disabled,.review-shell .clear-tags-button:disabled{opacity:.6;cursor:not-allowed}
+@media (max-width:620px){.review-shell .selected-tags-row{flex-wrap:wrap}.review-shell .selected-tags-chips{flex-basis:65%}}

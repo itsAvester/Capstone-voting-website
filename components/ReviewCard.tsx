@@ -73,6 +73,9 @@ export default function ReviewCard({item,saving,onSubmit}:{item:ReviewItem;savin
     // Default reason target is the losing side, but reviewers can freely override it.
     setReasonTarget(value==='left'?'right':value==='right'?'left':'both');
   }
+  function removeTag(code:string,appliesTo:ReasonTarget){
+    setReasonTags(previous=>previous.filter(tag=>!(tag.code===code&&tag.appliesTo===appliesTo)));
+  }
   function toggleTag(code:string){
     setReasonTags(previous=>{
       const exists=previous.some(t=>t.code===code&&t.appliesTo===reasonTarget);
@@ -110,7 +113,7 @@ export default function ReviewCard({item,saving,onSubmit}:{item:ReviewItem;savin
         </div>
       </div>
       <div className="reasons-line">
-        <div className="reason-label"><strong className="field-name">Reason tags <span className="small-muted">optional</span></strong>
+        <div className="reason-label"><strong className="field-name">Reason tags <span className="small-muted">click again to remove</span></strong>
           <label className="reason-target-label">Applies to
             <select aria-label="Which response do these tags apply to?" value={reasonTarget} onChange={e=>setReasonTarget(e.target.value as ReasonTarget)} disabled={saving}>
               <option value="left">A</option><option value="right">B</option><option value="both">Both</option>
@@ -133,7 +136,21 @@ export default function ReviewCard({item,saving,onSubmit}:{item:ReviewItem;savin
           {saving?'Saving…':'Submit & next →'}
         </button>
       </div>
-      {reasonTags.length>0&&<p className="tag-selection" aria-live="polite">Selected: {reasonTags.map(x=>`${x.code.replaceAll('_',' ')} (${x.appliesTo==='left'?'A':x.appliesTo==='right'?'B':'both'})`).join(' · ')}</p>}
+      {reasonTags.length>0&&<div className="selected-tags-row" aria-label="Selected reason tags">
+        <span className="selected-tags-label">Selected ({reasonTags.length}/8)</span>
+        <div className="selected-tags-chips">
+          {reasonTags.map(tag=>{
+            const label=REASON_OPTIONS.find(option=>option.code===tag.code)?.label??tag.code;
+            const targetLabel=tag.appliesTo==='left'?'A':tag.appliesTo==='right'?'B':'Both';
+            return <button key={`${tag.code}-${tag.appliesTo}`} type="button" className="selected-tag-chip"
+              disabled={saving} onClick={()=>removeTag(tag.code,tag.appliesTo)}
+              aria-label={`Remove ${label} for ${targetLabel}`} title={`Remove ${label} (${targetLabel})`}>
+                <span>{label} · {targetLabel}</span><span className="selected-tag-x" aria-hidden="true">×</span>
+              </button>;
+          })}
+        </div>
+        <button type="button" className="clear-tags-button" disabled={saving} onClick={()=>setReasonTags([])}>Clear all</button>
+      </div>}
       <div className="guidance-toggle"><button type="button" className="text-button" onClick={()=>setShowInstructions(v=>!v)}>{showInstructions?'Hide guidance':'Judging guidance'}</button></div>
       {showInstructions&&<p className="guidance">Choose the more useful and reliable answer to the actual user request. Tie = equally preferred; Both poor = neither adequate; Skip = cannot assess. Tags describe what you observed, not automatic rules: some requests do not need citations. A/B refers to the displayed panels; model names stay hidden. Reasons are optional and saved with your vote.</p>}
     </section>
